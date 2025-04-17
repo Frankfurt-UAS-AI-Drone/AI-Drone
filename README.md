@@ -66,3 +66,12 @@ Hardware selection:
 **Gesamtgewicht: 229,32g (+-20g)**
 
 **Gesamtpreis: 520,90€**
+
+
+Software:
+
+- **Betaflight 4.4:** Multi-rotor flight control software
+(https://betaflight.com/)
+- **Raspberry Pi OS Lite:** The official OS from the Raspberry Pi Foundation, specifically stripped down for devices like the Zero.
+(https://www.raspberrypi.com/software/operating-systems/)
+    - **Raspberry Pi Imager**, Guide: https://www.youtube.com/watch?v=yn59qX-Td3E
