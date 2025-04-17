@@ -13,7 +13,7 @@ Key attributes of the drone:
 
 ---
 
-Hardware selection:
+## Hardware selection:
 
 - Propeller: HQProp T2-8X2-4X3GP-PC 2,8 Zoll 3-Blatt Propeller Grau (2CW+2CCW) (Gewicht: 4 a 1.83g/Propeller = 7.32g, Preis: 2,90€)
 	-> 2CW bedeutet, dass sich die Propeller mit dem Uhrzeigersinn drehen
@@ -88,11 +88,18 @@ Hardware selection:
 - Storage: Samsung microSDHC EVO+ MB-MC32GA/EU
 - AI accelerator: Coral Google Edge TPU ML accelerator
 
+## Software:
 
-Software:
+- **Ardupilot:** This is the autopilot firmware that runs on the flight controller hardware. It handles the core flight stabilization, navigation, sensor reading, and control logic. Think of it as the drone's "operating system."
+    - Supports "SpeedyBee F405 V3".
+	- Uses **MAVLink (Micro Air Vehicle Link)**: This is the communication protocol that ArduPilot (and PX4) primarily uses to talk to the outside world - specifically Ground Control Stations (GCS) like Mission Planner/QGroundControl, companion computers (like a Raspberry Pi), and other MAVLink-aware devices. It defines a standard set of messages for sending commands (like "go to waypoint," "arm," "change flight mode") and receiving data (like GPS position, altitude, battery voltage, attitude).
+	- Works with the Pythn Dronekit.
+	- Alternatives:
+		- **PX4:** Does not support "SpeedyBee F405 V3"
+		- **Betaflight:** Does not use MAVLink
 
-- **PX4:** Open source flight control solution, supports autonomous drones and works with the Python Dronekit library. Has a clear and extensive documentation.
 - **Raspberry Pi OS Lite:** The official OS from the Raspberry Pi Foundation, specifically stripped down for devices like the Zero.
 (https://www.raspberrypi.com/software/operating-systems/)
     - **Raspberry Pi Imager**, Guide: https://www.youtube.com/watch?v=yn59qX-Td3E
+
 - **Python Dronekit:** Library for controlling the through Python code.
