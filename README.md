@@ -97,3 +97,15 @@ Key attributes of the drone:
     - **Raspberry Pi Imager**, Guide: https://www.youtube.com/watch?v=yn59qX-Td3E
 
 - **Python Dronekit:** Library for controlling the drone through Python code using the MAVLink protocol under the hood.
+
+
+## Anschlussplan
+- TODO: Make a graphic schematic.
+- Flight Controller:
+    - 4 Motoren: Jeweil an Motor 1-4 (Mapping kann in der Firmware erfolgen)
+    - Video transmitter: Yellow to VTX, Grün zu T3, Schwarz zu Ground A, Rot zu 5V(B)
+    - Camera: Ein ende des Kabels ablösen und and die Ecke des Controllers löten
+    - Raspberry Pi: Power an Ecke des Controllers mit USB-C. Kommunikation via USB-C zu Micro-usb
+    - ELRS Receiver: Schwarz zu G, Rot zu 4V5, RX (Grün) zu T6, TX (Weiß) zu RX (R6)
+    - Battery: Battery + and Battery -
+    - 
