@@ -15,9 +15,22 @@ Key attributes of the drone:
 
 Hardware selection:
 
-- Propellers: 3,5" span because we would like to achieve maximum thrust while staying below 250g drone weight
-    - Question: What is the optimal propeller form and material for our use case?
-        - Thinner propellers are better for fast flying drones, less air resistance and less thurst on lower number of revolutions
-        - Thicker propellers have more area and therefore have more thrust on lower number revolutions
-    - Selection: https://www.fpv24.com/de/hqprop/hqprop-t2-8x2-4x3gp-pc-28-zoll-3-blatt-propeller-grau-2cw2ccw
-- Frame: 
+- Remote controller: Radiomaster Boxer ELRS GRYM2 
+- Goggles: FATSHARK ECHO FPV Video Headset - Part Number: FSV1131-04
+- Charger: SKYRC S100 neo AC/DC Smart Balance Charger
+- Heavy battery: R-LINE Tattu 95C - 750mAh
+- Light battery: Gaoneng LiPo Akku 4S 650mAh 15.2V
+- Flight controller: SPEEDYBEE F4-40A-AIO 
+- Video connector: SPEEDYBEE TX800 
+- Camera: 
+    + Caddx Ratel PRO MN01 - 4000B
+    + Raspberry Pi Camera: RB-Camera_JT-V2-120
+- Propellers: 
+    + Hurricane 51477-3 Clear Blue PC 2L2R
+    + EthixS4-LL-PC (2CW+2CCW)
+- Propeller engine: 4x XING E-Pro 2308 2450kv
+- Frame: Volador II VX5 FPV Freestyle T700 Frame Kit-Black
+- Smoke stopper: TBS Smoke Stopper
+- Single board computer: Raspberry Pi Zero WH PI3G
+- Storage: Samsung microSDHC EVO+ MB-MC32GA/EU
+- AI accelerator: Coral Google Edge TPU ML accelerator
