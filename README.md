@@ -91,10 +91,8 @@ Hardware selection:
 
 Software:
 
-- **Betaflight 4.4:** Multi-rotor flight control software
-(https://betaflight.com/)
+- **PX4:** Open source flight control solution, supports autonomous drones and works with the Python Dronekit library. Has a clear and extensive documentation.
 - **Raspberry Pi OS Lite:** The official OS from the Raspberry Pi Foundation, specifically stripped down for devices like the Zero.
 (https://www.raspberrypi.com/software/operating-systems/)
     - **Raspberry Pi Imager**, Guide: https://www.youtube.com/watch?v=yn59qX-Td3E
-
-
+- **Python Dronekit:** Library for controlling the through Python code.
