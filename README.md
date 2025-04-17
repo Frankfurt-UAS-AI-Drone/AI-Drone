@@ -102,4 +102,4 @@ Key attributes of the drone:
 (https://www.raspberrypi.com/software/operating-systems/)
     - **Raspberry Pi Imager**, Guide: https://www.youtube.com/watch?v=yn59qX-Td3E
 
-- **Python Dronekit:** Library for controlling the through Python code.
+- **Python Dronekit:** Library for controlling the drone through Python code using the MAVLink protocol under the hood.
