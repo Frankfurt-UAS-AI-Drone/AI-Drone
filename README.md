@@ -62,25 +62,42 @@ Key attributes of the drone:
 ### Additional parts
 
 ### Final parts list
-- Remote controller: Radiomaster Boxer ELRS GRYM2 
+- Remote controller: Radiomaster Boxer ELRS GRYM2
+- ![Radiomaster Boxer ELRS GRYM2](https://github.com/user-attachments/assets/4adf8ed4-f03f-4ecb-ad39-d1dbb5ff5a88)
 - Goggles: FATSHARK ECHO FPV Video Headset - Part Number: FSV1131-04
+- ![FATSHARK ECHO FPV Video Headset  Part Number FSV113104](https://github.com/user-attachments/assets/0145a024-5f2b-45b6-9705-da1cc0ebc2b3)
 - Charger: SKYRC S100 neo AC/DC Smart Balance Charger
+- ![SKYRC S100 neo ACDC Smart Balance Charger](https://github.com/user-attachments/assets/b35d5ff0-f878-428d-853c-3ee3fe6bcec9)
 - Heavy battery: R-LINE Tattu 95C - 750mAh
+- ![RLINE Tattu 95C  750mAh](https://github.com/user-attachments/assets/5f975007-0e8f-49c7-a3bd-7873df062c15)
 - Light battery: Gaoneng LiPo Akku 4S 650mAh 15.2V
-- Flight controller: SPEEDYBEE F4-40A-AIO 
-- Video connector: SPEEDYBEE TX800 
+- ![Gaoneng LiPo Akku 4S 650mAh](https://github.com/user-attachments/assets/b190d3b9-eec9-43b0-8376-fe19a671c3a8)
+- Flight controller: SPEEDYBEE F4-40A-AIO
+- ![SPEEDYBEE F440AAIO](https://github.com/user-attachments/assets/6e0381af-ce7d-42b8-8952-ee0ca2a79f7b)
+- Video connector: SPEEDYBEE TX800
+- ![SPEEDYBEE TX800](https://github.com/user-attachments/assets/8626cc11-8d90-4382-bc53-8b9d50c9d130)
 - Camera: 
     + Caddx Ratel PRO MN01 - 4000B
+    + ![Caddx Ratel PRO MN01 4000B](https://github.com/user-attachments/assets/a70b9940-852c-4d9c-a8c5-6bd6b7b3c6fd)
     + Raspberry Pi Camera: RB-Camera_JT-V2-120
+    + ![Raspberry Pi Camera RBCamera_JTV2120](https://github.com/user-attachments/assets/cac13b23-45ce-48fe-9eee-c64ce7497e05)
 - Propellers: 
     + Hurricane 51477-3 Clear Blue PC 2L2R
+    + ![Hurricane 514773 Clear Blue PC 2L2R](https://github.com/user-attachments/assets/b917f35a-fa97-4a60-b910-e3395011b26b)
     + EthixS4-LL-PC (2CW+2CCW)
+    + ![EthixS4LLPC (2CW+2CCW)](https://github.com/user-attachments/assets/375c510a-bc02-4880-a5ab-9c0989cb4da5)
 - Propeller engine: 4x XING E-Pro 2308 2450kv
 - Frame: Volador II VX5 FPV Freestyle T700 Frame Kit-Black
+- ![Volador II VX5 FPV Freestyle T700 Frame KitBlack](https://github.com/user-attachments/assets/a61b6ecd-448b-4420-9caf-d5142df20b10)
 - Smoke stopper: TBS Smoke Stopper
+- ![TBS Smoke Stopper](https://github.com/user-attachments/assets/a22b24e2-8f63-4cc3-8b30-570295c3c4cc)
 - Single board computer: Raspberry Pi Zero WH PI3G
+- ![Raspberry Pi Zero WH PI3G](https://github.com/user-attachments/assets/b2f03447-e45f-4378-a3f8-38b82df81dcf)
 - Storage: Samsung microSDHC EVO+ MB-MC32GA/EU
+- ![Samsung microSDHC EVO+ MBMC32GAEU](https://github.com/user-attachments/assets/16a44967-3cef-4965-b33a-8c88ee5f1853)
 - AI accelerator: Coral Google Edge TPU ML accelerator
+- ![Coral Google Edge TPU ML accelerator](https://github.com/user-attachments/assets/a86a48e5-1b78-4d44-b2a3-e914d33bc955)
+
 
 ## Software:
 
