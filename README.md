@@ -120,9 +120,27 @@ Key attributes of the drone:
 - TODO: Make a graphic schematic.
 - Flight Controller:
     - 4 Motoren: Jeweil an Motor 1-4 (Mapping kann in der Firmware erfolgen)
+    - ![Motor and Power Cabel Wires](https://github.com/user-attachments/assets/a2c0cc8a-4f55-4a8a-bb12-4fffb33648a3)
+      
     - Video transmitter: Yellow to VTX, Grün zu T3, Schwarz zu Ground A, Rot zu 5V(B)
+    - ![Analog VTX Connection Wire](https://github.com/user-attachments/assets/7be183e3-ed4c-479a-bf2f-3e61480d98b1)
+      
     - Camera: Ein ende des Kabels ablösen und and die Ecke des Controllers löten
-    - Raspberry Pi: Power an Ecke des Controllers mit USB-C. Kommunikation via USB-C zu Micro-usb
+    - ![Camera zu Menu Board](https://github.com/user-attachments/assets/9e980b05-f491-4ae1-89ca-7c9d233cdc9c)
+
+    - Raspberry Pi: Power an Verlängerung des Controllers mit 5V (PP1)/GND (PP6) Anschließen. Kommunikation via Data + (PP22) Data - (PP23)
+    - ![Pi Power Anschluss Rueckseite](https://github.com/user-attachments/assets/d7a57e30-853c-4a0b-abb1-b59ea10bdfbf)
+    - ![Power Expander](https://github.com/user-attachments/assets/f73d136a-1662-44c5-b087-f6eaa22abd16)
+
     - ELRS Receiver: Schwarz zu G, Rot zu 4V5, RX (Grün) zu T6, TX (Weiß) zu RX (R6)
+    - ![ELRS Receiver Connection Wire](https://github.com/user-attachments/assets/ac138282-b6d5-46f5-80b2-f327775bc414)
+
     - Battery: Battery + and Battery -
-    - 
+    - ![Motor and Power Cabel Wires](https://github.com/user-attachments/assets/dd43df77-3be3-4b10-884c-460a0c77ebef)
+ 
+    - TYP-C USB -
+    - ![Typ-C Extern](https://github.com/user-attachments/assets/f95ba354-f742-484a-bd3c-ed8984650e06)
+ 
+    - GPS Module -
+    - ![GPS Modul Wire](https://github.com/user-attachments/assets/5e98777f-95f9-4d4e-a9cd-49165bcf5ae7)
+
