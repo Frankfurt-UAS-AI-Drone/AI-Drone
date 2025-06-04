@@ -144,3 +144,84 @@ Key attributes of the drone:
     - GPS Module -
     - ![GPS Modul Wire](https://github.com/user-attachments/assets/5e98777f-95f9-4d4e-a9cd-49165bcf5ae7)
 
+# Radiomaster Boxer notes
+## Startup Warnings
+- **Throttle Warning** – Throttle (left) stick is not at the lowest position when turned on 
+- **Switch Warning** (aka Control Warning) – some of the switches are not in their default positions. -> Put all the switches to UP position (pointing away) to remove this warning.
+- **Alarms Warning** – This warning will appear if Sound mode is set to mute
+- **SD Card Warning** – SD card content version does not match the firmware version. -> [Fix](https://oscarliang.com/fix-sd-card-warning-opentx/)
+## Channel Mappings
+- The two ***most common channel map settings*** for FPV drones are:
+	- AETR (Aileron, Elevator, Throttle, Rudder) -> Betaflight default (AETR1234):
+		- *CH 1:* **A (Aileron)** = Roll (left/right)
+		- *CH 2:* **E (Elevator)** = Pitch (forward/backward)
+		- *CH 3:* **T (Throttle)** = Throttle (speed up/down)
+		- *CH 4:* **R (Rudder)** = Yaw (rotate left/right)
+	- TAER (Throttle, Aileron, Elevator, Rudder) -> Different betaflight option
+
+- ***Channel order*** for the drone can be viewed on the MIXES page in any EdgeTX radio.
+- Channel order can also be set up in EdgeTX in the remote controller itself. -> Process:
+	1. From the home screen, press the **Model** button. 
+	2. Navigate to **Mixes** tab by pressing the *Page* button until the heading shows up.
+	3. The following maps the channels according to the AETR (Betaflight default):
+		1. **Channel 1 (Roll)**:
+		    - Highlight **CH1** using the jog wheel and press to enter the setup.
+		    - Set **Source** to *aileron* stick. -> Optionally, adjust **Weight** (how much stick movement passed to output) or apply **Expo** for smoother control.
+		2. **Channel 2 (Pitch)** -> Highlight **CH2** and set the **Source** to the *elevator* stick.
+		3. **Channel 3 (Throttle)** -> Highlight **CH3** and set the **Source** to the *throttle* stick.
+		4. **Channel 4 (Yaw)** -> Highlight **CH4** and set the **Source** to the *rudder* stick.
+	
+- To set the ***default channel*** order in EdgeTX do the following:
+	1. Press the **SYS** button and navigate to the *Settings* tab with the **PAGE** button.
+	2. Scroll down to find the *Default Channel Order* setting and set it to **AETR**
+	3. Press return to save the changes.
+
+- ***Setting up switches*** -> for uses like arming, flight modes or GPS rescue:
+	- It is recommended to use *CH 5* for the **Arm switch** -> Process:
+		1. Navigate to Mixes page, highlight CH 5 and press jog wheel to enter settings
+		2. Scroll to source and flip the switch you want to use for arming (e.g. SA & SD)
+		3. Leave the remaining values default and save the settings.
+	- For configuring **flight modes** a 3-position switch is recommended (e.g. SC & SD):
+		- To achieve this, repeat the process to assign a switch to e.g. *CH 6*
+
+- ***Testing*** the channel mapping setup:
+	1. Connect your drone and open the Receiver tab in Betaflight Configurator
+	2. Move the sticks and see if the corresponding channels respond correctly.
+		1. CH 5 corresponds to AUX 1, CH 6 corresponds to AUX 2 and so on...
+
+- ***Setting up modes*** in Betaflight *(Requires channels to be set up)*:
+	1. Go to the modes tab in the Betaflight Configurator
+	2. Select the mode (e.g. ARM) and click "Add Range"
+	3. Select AUX 1 (CH 5) and drag the range to the desired position.
+		1. For a 2 position switch: UP = 1000 and DOWN = 2000
+		2. For a 3 position switch: UP = 1000, MID = 1500 and DOWN = 2000
+
+- ***The most important modes are:***
+	- **ARM** - Starts the motors -> Should be immediately disabled upon a crash
+		- *MOTOR STOP* option only spins motors, once throttle is increased.
+	- **ACRO** - Drone files without any assistance from the FC. -> Every movement will require direct command input from the pilot. -> *"Ultimate flight mode"*
+	- **ACRO TRAINER** - Acro mode with tilt angle limit to prevent drone from flipping over.
+	- **ANGLE** - Drone self-levels when the sticks are released to the centered position.
+		- Limits the max. tilt angle -> *Requires accelerometer to be activated.*
+	- **HORIZON** - Angle mode with ability to do flips, when the stick passes a threshold.
+		- *Requires accelerometer to be activated.*
+	- **GPS RESCUE** - Let's the drone fly back from where it took off (requires GPS module)
+	- **FAILSAFE** - Simulates failsafe (for testing), which occurs in the event of RC link loss.
+	- **ANTI GRAVITY** - Reduces sudden dips on rapid throttle changes
+	- **BLACKBOX** - Start/stop blackbox logging
+	- **FLIP OVER AFTER CRASH** - Flip quad if stuck upside down to take off after a crash
+
+# Raspberry Pi notes
+- Use 32-Bit slim image (V1.1) or a 64-Bit slim image (V2) for better performance
+	- Default device name is `bananapi` -> `pi` user has passphrase `banana`
+	- Configure the Pi to use a WiFi of your choosing and allow SSH with passphrase
+	- `dtoverlay=imx219 & camera_auto_detect=0` to `/boot/config.txt` for [Camera](https://joy-it.net/de/products/rb-camera-jt-v2-120)
+		- Test the camera with `libcamera-hello`
+	- Find the IP-Address of the Raspberry pi and connect to it with pi@ipaddress
+	- Install [libedgetpu1-std](https://coral.ai/docs/accelerator/get-started/#runtime-on-linux) 
+	- Install python3-pycoral (requires python < 3.10)
+	- Install python3-opencv (requires python < 3.12)
+	- Install python3-picamera2
+	- Install pip3 -> MultiWii (requires python > 3.7)and pyserial
+	- Install the Docker Engine using the guide for [Debian](https://docs.docker.com/engine/install/debian/) NOT SUPPORTED YET!!!
+		- Maybe useful for other components or if the camera can be made to work with the legacy camera stack (no picamera2 available) 
