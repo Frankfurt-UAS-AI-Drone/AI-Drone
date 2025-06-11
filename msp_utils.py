@@ -41,8 +41,7 @@ def read_msp_response(serial_port):
         payload = response[5:5 + length]
         return msp_command_id, payload
     else:
-        print(response)
-        raise ValueError("Invalid MSP response")
+        raise ValueError(f"Invalid MSP response: {response}")
 
 # BEGIN Processing MSP responses. Taken from: https://github.com/thecognifly/YAMSPy/blob/7adda7953645d2e4d619075e4d8232c91a289049/yamspy/__init__.py
 def readbytes(data, size=8, unsigned=False, read_as_float=False):
