@@ -4,12 +4,13 @@ from picamera2.outputs import FfmpegOutput
 import cv2
 from pycoral.adapters import common, detect
 from pycoral.utils.edgetpu import make_interpreter
-from time import sleep
+from time import sleep, time
+from datetime import datetime
 
 class InferenceController():
     def __init__(self):
         # Initialize Coral
-        self.interpreter = make_interpreter('models/effdet_lite3.tflite')
+        self.interpreter = make_interpreter('models/ssd_mobnet2/ssd_mobnet2_tf2.tflite')
         self.interpreter.allocate_tensors()
         self.size = common.input_size(self.interpreter)
 
@@ -19,7 +20,7 @@ class InferenceController():
         self.video_encoder = H264Encoder()
 
         self.video_config = self.camera.create_video_configuration(main={"size": self.size}, encode="main")
-        self.video_fps = 30
+        self.video_fps = 30.0
         self.still_config = self.camera.create_still_configuration({"size": self.size})
 
         self.camera.configure(self.preview_config)
@@ -27,21 +28,37 @@ class InferenceController():
         self.camera.start()
         sleep(2) 
 
-    # TODO: Create dynamic file names in a dedicated directory
     def take_and_infer_still(self):
         self.camera.switch_mode(self.still_config)
+        
         frame = self.camera.capture_array()
-
         processed_frame = self.process_frame(frame)
 
         cv2.imwrite(f"/home/pi/drone/images/{datetime.today().strftime('%Y-%m-%d_%H-%M-%S')}.jpg", processed_frame)
         print("Image processed and saved!")
 
-    # TODO: Create dynamic file names in a dedicated directory AND return the file name for post-processing
+    # TODO: Processing stream with a smaller model works, but video looks like it runs at double playback speed
     def record_video(self):
-        self.camera.switch_mode(self.video_config)
+        self.camera.switch_mode(self.still_config)
+        out = cv2.VideoWriter(f"/home/pi/drone/videos/{datetime.today().strftime('%Y-%m-%d_%H-%M-%S')}.avi", cv2.VideoWriter_fourcc(*'XVID'), self.video_fps, self.size)
+        
+        frame_time = 1.0 / self.video_fps
 
-        self.camera.start_and_record_video("test.mp4", duration=5)
+        try: 
+            while True:
+                start = time()
+
+                frame = self.camera.capture_array()
+                processed_frame = self.process_frame(frame)
+                out.write(frame)
+
+                elapsed = time() - start
+                if elapsed < frame_time:
+                    sleep(frame_time - elapsed)
+
+        except KeyboardInterrupt:
+            self.close()
+            out.release()
 
     def close(self):
         self.camera.close()
@@ -66,7 +83,7 @@ class InferenceController():
         out.release()
         print("Successfully exited.")
 
-    def process_frame(self, frame):
+    def process_frame(self, frame, video=False):
         common.set_input(self.interpreter, frame)
         self.interpreter.invoke()
 
