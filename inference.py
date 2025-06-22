@@ -34,8 +34,8 @@ class InferenceController():
 
         processed_frame = self.process_frame(frame)
 
-        cv2.imwrite("test_image.jpg", processed_frame)
-        print("Image saved as test_image.jpg")
+        cv2.imwrite(f"/home/pi/drone/images/{datetime.today().strftime('%Y-%m-%d_%H-%M-%S')}.jpg", processed_frame)
+        print("Image processed and saved!")
 
     # TODO: Create dynamic file names in a dedicated directory AND return the file name for post-processing
     def record_video(self):

@@ -93,7 +93,13 @@ def process_MSP_RAW_GPS(data):
     ground_course = readbytes(data, size=16, unsigned=True)
 
     return {
-
+        "fix": fix,
+        "numSat": numSat,
+        "lat": lat,
+        "lon": lon,
+        "alt": alt,
+        "speed": speed,
+        "ground_course": ground_course
     }
 
 def process_MSP_RC(data):
