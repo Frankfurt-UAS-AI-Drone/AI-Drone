@@ -51,10 +51,10 @@ try:
             print('Taking photo...')
             controller.take_and_infer_still()
 
+        # TODO: Take video until remote control changes away from 2000
         if aux3_previous == 1000 and aux3_current == 2000:
             print("Taking video...")
-            controller.record_video()
-            controller.infer_video() #Inference takes too much time and does not work properly 
+            controller.stream_and_infer_video()
 
         # TODO: Create class for the autopilot
         if aux4_previous == 1000 and aux4_current == 1503:
@@ -84,7 +84,7 @@ try:
 
         sleep(1)
 except KeyboardInterrupt:
-    controller.close()
+    controller.camera.close()
 
 """
 
