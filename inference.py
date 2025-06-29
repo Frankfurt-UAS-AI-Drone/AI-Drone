@@ -1,5 +1,5 @@
 # TODO: Refactor to absolute paths
-
+import threading
 from picamera2 import Picamera2
 from picamera2.encoders import H264Encoder, Quality
 from picamera2.outputs import FfmpegOutput
@@ -22,6 +22,7 @@ class InferenceController():
         self.video_interpreter.allocate_tensors()
         self.video_size = common.input_size(self.video_interpreter)
         self.video_labels = read_label_file("models/ssd_mobnet2/ssd_mobnet2_tf2.labels")
+        self.stop_event = threading.Event()
 
         # Initialize Camera
         self.camera = Picamera2()
@@ -43,16 +44,19 @@ class InferenceController():
 
     # TODO: Improve performance on video inference. Manages only 10FPS video on output.
     def stream_and_infer_video(self):
+        self.stop_event.clear()
         self.camera.switch_mode(self.video_config)
         out = cv2.VideoWriter(f"/home/pi/drone/videos/{datetime.today().strftime('%Y-%m-%d_%H-%M-%S')}.avi", cv2.VideoWriter_fourcc(*'XVID'), self.playback_fps, self.video_size)
 
         try: 
-            while True:
+            while not self.stop_event.is_set():
                 recorded_frame = self.camera.capture_array()
                 processed_frame = self.process_frame(recorded_frame, video=True)
                 out.write(processed_frame)
-
-        except KeyboardInterrupt:
+        except Exception as e:
+            print(f"Recording error: {e}")
+        finally:
+            print("Exiting...")
             out.release()
 
     def process_frame(self, frame, video=False):

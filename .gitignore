@@ -1,1 +1,5 @@
 *.tflite
+*.jpg
+*.avi
+__pycache__/
+test.py
