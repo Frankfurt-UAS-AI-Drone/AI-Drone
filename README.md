@@ -224,4 +224,169 @@ Key attributes of the drone:
 	- Install python3-picamera2
 	- Install pip3 -> MultiWii (requires python > 3.7)and pyserial
 	- Install the Docker Engine using the guide for [Debian](https://docs.docker.com/engine/install/debian/) NOT SUPPORTED YET!!!
-		- Maybe useful for other components or if the camera can be made to work with the legacy camera stack (no picamera2 available) 
+		- Maybe useful for other components or if the camera can be made to work with the legacy camera stack (no picamera2 available)
+ 
+  - Betaflight MSP Payload-Dekodierung auf dem Raspberry Pi
+🎯 Ziel
+Direktes Auslesen von Daten (z. B. ARM-Status, Cycle-Time, Sensor-Flags) vom Flight Controller (Betaflight) über USB/seriell auf einem Raspberry Pi – ohne zusätzliche Bibliotheken wie pymultiwii.
+ Wir wollen die MSP-Nachrichten manuell senden/parsen und die empfangene Payload korrekt dekodieren.
+
+⚙️ 1️⃣ Was ist MSP?
+MSP (MultiWii Serial Protocol) ist das Protokoll, mit dem Betaflight über die serielle Schnittstelle konfiguriert und ausgelesen wird.
+ Eine MSP-Nachricht besteht grob aus:
+Header ($M< oder $M> für Antwort)
+
+
+Länge
+
+
+Befehlscode
+
+
+Payload
+
+
+Checksumme
+
+
+
+⚙️ 2️⃣ Beispielbefehl: MSP_STATUS
+Der Befehlscode für MSP_STATUS ist 101. Wenn du diesen Befehl schickst, liefert Betaflight eine feste Payload-Struktur zurück.
+
+⚙️ 3️⃣ MSP_STATUS-Payload
+
+Variable
+Datentyp
+Größe (Bytes)
+Beschreibung
+cycleTime
+uint16
+2
+Loopzeit in Mikrosekunden
+i2cError
+uint16
+2
+Anzahl I2C-Fehler
+sensor
+uint16
+2
+Bitfeld aktiver Sensoren
+flag
+uint8
+1
+ARM-Status etc.
+setting
+uint8
+1
+Aktuelles Setting-Index
+loopTime
+uint16
+2
+Loop-Zeitkonfiguration
+debug[4]
+int16 × 4
+8
+Debugwerte
+reserved
+verschieden
+6
+Reserviert/Versionsabhängig
+
+Betaflight-Dokumentation beschreibt MSP_STATUS-Antwort z. B. so:✅ Summe = 24 Bytes Payload
+
+⚙️ 4️⃣ Warum ist das wichtig?
+Wenn du die Payload vom Flight Controller bekommst (z. B. 24 Bytes), musst du sie beim Parsen in Python exakt entsprechend ihrer Struktur zerlegen.
+ Falsche Länge in struct.unpack → Fehler!
+ Beispiel:
+csharp
+struct.unpack('<HHHBBH', data)  # ergibt nur 10 Bytes → Fehler bei 24 Bytes
+
+
+⚙️ 5️⃣ Korrektes Unpacken in Python
+Für 24 Bytes musst du alle enthaltenen Felder berücksichtigen.
+Passendes struct-Format:
+H = unsigned short = 2 Byte
+
+
+B = unsigned char = 1 Byte
+
+
+h = signed short = 2 Byte
+
+
+Beispiel-Formatstring:
+<HHHBBHhhhhhh
+
+= 2+2+2+1+1+2 + 2×6 = 24 Bytes ✅
+
+✅ Beispiel-Code (minimal)
+python
+
+import struct
+
+payload = your_24_byte_buffer
+
+result = struct.unpack('<HHHBBHhhhhhh', payload)
+
+cycle_time = result[0]
+i2c_error = result[1]
+sensor_flags = result[2]
+arm_flag = result[3]
+setting = result[4]
+loop_time = result[5]
+debug = result[6:12]
+
+print(f"Cycle Time: {cycle_time} µs")
+print(f"I2C Errors: {i2c_error}")
+print(f"Sensors Bitfield: {sensor_flags:#06b}")
+print(f"ARM Flag: {arm_flag}")
+print(f"Setting Index: {setting}")
+print(f"Loop Time: {loop_time}")
+print(f"Debug Values: {debug}")
+
+
+⚙️ 6️⃣ Wie erkennt man, ob die Drohne „ARMED“ ist?
+Das Flag-Feld enthält ARM-Bits. Typisch:
+0x01 → ARMED
+
+
+0x00 → DISARMED
+
+
+Beispiel:
+python
+
+if arm_flag & 0x01:
+    print("Coptern ist ARMED")
+else:
+    print("Coptern ist DISARMED")
+
+
+⚙️ 7️⃣ Schritt-für-Schritt auf dem Raspberry Pi
+✅ 1. Seriellen Port öffnen
+python
+
+import serial
+ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+
+✅ 2. MSP-Befehl zum FC senden
+python
+
+def build_msp(cmd):
+    payload = b''
+    size = len(payload)
+    checksum = (size ^ cmd) & 0xFF
+    header = b'$M<'
+    return header + bytes([size]) + bytes([cmd]) + bytes([checksum])
+
+ser.write(build_msp(101))  # MSP_STATUS
+
+✅ 3. Antwort lesen & dekodieren
+python
+
+frame = ser.read(30)  # Safety: etwas länger lesen
+payload = frame[4:4+24]
+result = struct.unpack('<HHHBBHhhhhhh', payload)
+
+
+
