@@ -22,11 +22,12 @@ class InferenceController():
         self.video_interpreter.allocate_tensors()
         self.video_size = common.input_size(self.video_interpreter)
         self.video_labels = read_label_file("models/ssd_mobnet2/ssd_mobnet2_tf2.labels")
+        
         self.stop_event = threading.Event()
 
         # Initialize Camera
         self.camera = Picamera2()
-        self.recording_fps = 60.0
+        self.recording_fps = 30.0
         self.playback_fps = 10.0
         self.video_config = self.camera.create_video_configuration(main= {"size": self.video_size, 'format': 'RGB888'}, controls={"FrameRate": self.recording_fps})
         self.still_config = self.camera.create_still_configuration({"size": self.still_size, 'format': 'RGB888'})
@@ -74,7 +75,7 @@ class InferenceController():
         for obj in objects:
             bbox = obj.bbox
             cv2.rectangle(frame, (bbox.xmin, bbox.ymin), (bbox.xmax, bbox.ymax), (0, 255, 0), 2)
-            cv2.putText(frame, f'{obj.id} {obj.score:.2f}', (bbox.xmin, bbox.ymin - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(frame, f'{obj.id} {labels.get(obj.id, obj.id)} {obj.score:.2f}', (bbox.xmin, bbox.ymin - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             print(f"Detected: {labels.get(obj.id, obj.id)} (ID: {obj.id}, Score: {obj.score:.2f})")
 
         return frame
