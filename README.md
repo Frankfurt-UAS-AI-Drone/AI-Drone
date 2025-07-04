@@ -227,11 +227,11 @@ Key attributes of the drone:
 		- Maybe useful for other components or if the camera can be made to work with the legacy camera stack (no picamera2 available)
  
   - Betaflight MSP Payload-Dekodierung auf dem Raspberry Pi
-🎯 Ziel
+Ziel
 Direktes Auslesen von Daten (z. B. ARM-Status, Cycle-Time, Sensor-Flags) vom Flight Controller (Betaflight) über USB/seriell auf einem Raspberry Pi – ohne zusätzliche Bibliotheken wie pymultiwii.
  Wir wollen die MSP-Nachrichten manuell senden/parsen und die empfangene Payload korrekt dekodieren.
 
-⚙️ 1️⃣ Was ist MSP?
+ 1️. Was ist MSP?
 MSP (MultiWii Serial Protocol) ist das Protokoll, mit dem Betaflight über die serielle Schnittstelle konfiguriert und ausgelesen wird.
  Eine MSP-Nachricht besteht grob aus:
 Header ($M< oder $M> für Antwort)
@@ -250,10 +250,10 @@ Checksumme
 
 
 
-⚙️ 2️⃣ Beispielbefehl: MSP_STATUS
+ 2️. Beispielbefehl: MSP_STATUS
 Der Befehlscode für MSP_STATUS ist 101. Wenn du diesen Befehl schickst, liefert Betaflight eine feste Payload-Struktur zurück.
 
-⚙️ 3️⃣ MSP_STATUS-Payload
+ 3️. MSP_STATUS-Payload
 
 Variable
 Datentyp
@@ -292,9 +292,9 @@ verschieden
 6
 Reserviert/Versionsabhängig
 
-Betaflight-Dokumentation beschreibt MSP_STATUS-Antwort z. B. so:✅ Summe = 24 Bytes Payload
+Betaflight-Dokumentation beschreibt MSP_STATUS-Antwort z. B. so: Summe = 24 Bytes Payload
 
-⚙️ 4️⃣ Warum ist das wichtig?
+ 4️. Warum ist das wichtig?
 Wenn du die Payload vom Flight Controller bekommst (z. B. 24 Bytes), musst du sie beim Parsen in Python exakt entsprechend ihrer Struktur zerlegen.
  Falsche Länge in struct.unpack → Fehler!
  Beispiel:
@@ -302,7 +302,7 @@ csharp
 struct.unpack('<HHHBBH', data)  # ergibt nur 10 Bytes → Fehler bei 24 Bytes
 
 
-⚙️ 5️⃣ Korrektes Unpacken in Python
+ 5️. Korrektes Unpacken in Python
 Für 24 Bytes musst du alle enthaltenen Felder berücksichtigen.
 Passendes struct-Format:
 H = unsigned short = 2 Byte
@@ -317,9 +317,9 @@ h = signed short = 2 Byte
 Beispiel-Formatstring:
 <HHHBBHhhhhhh
 
-= 2+2+2+1+1+2 + 2×6 = 24 Bytes ✅
+= 2+2+2+1+1+2 + 2×6 = 24 Bytes
 
-✅ Beispiel-Code (minimal)
+Beispiel-Code (minimal)
 python
 
 import struct
@@ -345,7 +345,7 @@ print(f"Loop Time: {loop_time}")
 print(f"Debug Values: {debug}")
 
 
-⚙️ 6️⃣ Wie erkennt man, ob die Drohne „ARMED“ ist?
+ 6️. Wie erkennt man, ob die Drohne „ARMED“ ist?
 Das Flag-Feld enthält ARM-Bits. Typisch:
 0x01 → ARMED
 
@@ -362,14 +362,14 @@ else:
     print("Coptern ist DISARMED")
 
 
-⚙️ 7️⃣ Schritt-für-Schritt auf dem Raspberry Pi
-✅ 1. Seriellen Port öffnen
+ 7. Schritt-für-Schritt auf dem Raspberry Pi
+1. Seriellen Port öffnen
 python
 
 import serial
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 
-✅ 2. MSP-Befehl zum FC senden
+2. MSP-Befehl zum FC senden
 python
 
 def build_msp(cmd):
@@ -381,12 +381,106 @@ def build_msp(cmd):
 
 ser.write(build_msp(101))  # MSP_STATUS
 
-✅ 3. Antwort lesen & dekodieren
+3. Antwort lesen & dekodieren
 python
 
 frame = ser.read(30)  # Safety: etwas länger lesen
 payload = frame[4:4+24]
 result = struct.unpack('<HHHBBHhhhhhh', payload)
 
+Theoretischer Teil: Konzept für eine Drohne mit Greifarm
+1. Einleitung
+Der Einsatz von Drohnen mit einem Greifarm eröffnet vielfältige Anwendungsmöglichkeiten – von der Inspektion und der Lieferung sowie zur Rettung. Im Rahmen dieses Projekts wurde die Option untersucht, einen mechanischen Greifarm an die bestehende Drohne zu montieren, um Objekte präzise aufheben und ablegen zu können.
+Da für den praktischen Aufbau die Zeit nicht mehr ausreichte, wurde hier eine theoretische Planung vorgestellt, die zeigt, wie ein solcher Umbau realisierbar wäre.
+2. Zielsetzung
+Das Ziel ist die Entwicklung eines modularen Konzepts für einen Greifarm, der folgende Anforderungen erfüllt:
+Gewicht und Balance der Drohne berücksichtigen
+
+
+Fernsteuerbarkeit über den Raspberry Pi / Flight Controller und Radiomaster (AUX) 
+
+
+Energieversorgung aus dem Bordakku über Raspberry Pi
+
+
+Steuerung über Raspberry Pi oder direkt über Flight Controller und Radiomaster 
+
+
+3. Mechanischer Aufbau
+3.1. Greifarm-Design
+Einfache ServoCity Servo-Driven Gripper Kit (Servo-Motor included)
+
+
+Leichtbauweise 101 g und kann sich um 180 Grad öffnen.
+
+
+Gewicht < 150 g, um Flugzeit und Stabilität nicht zu stark zu reduzieren
+
+
+Montagesystem Schnellverschluss bzw. Verschraubung an der Unterseite der Drohne
+
+
+3.2. Befestigung
+Schwerpunkt-Justierung (nach unten hängender Arm verändert Schwerpunkt)
+
+
+Dämpfer zur Reduktion von Schwingungen
+
+
+4. Elektrischer Aufbau
+4.1. Servoansteuerung
+Standard-Servo (PWM-gesteuert, ~4–6 V Versorgung)
+
+
+Anschluss und Ansteuerung über Raspberry Pi via GPIO bzw. Flight Controller
+
+
+4.2. Energieversorgung
+Speisung aus 4-6 V über des Raspberry Pi / Flight Controller
+
+
+Sichere Kabelführung vermeiden von Propeller Kontakt
+5. Steuerungskonzept
+5.1. Über Flight Controller (Betaflight)
+Nutzung von „SERVO“-Tab in Betaflight
+
+
+Konfig. eines AUX-Kanals zum Öffnen/Schließen (Radiomaster Fernsteuerung)
+
+
+5.2. Über Raspberry Pi
+Python-Script zur PWM-Steuerung des Servos
+
+
+Kommunikation zwischen Raspberry Pi und Flight Controller via MSP/Betaflight
+
+
+6. Software-Seite
+Raspberry Pi kann als Steuerzentrale für autonomes Öffnen/Schließen dienen
+
+
+Verbindung zum Flight Controller über MSP-Protokoll für Statusdaten
+
+
+Kamera-Integration zur Erkennung von Objekten
+
+
+7. Gewicht und Flugverhalten
+Simulierte Kalkulation: Greifarm + Servo + Kabel ≈ 100–150 g
+
+
+Reduzierte Flugzeit (~10–20 % weniger)
+
+
+Schwerpunkt Anpassung nötig zum Teil Akkuposition verschieben
+
+
+8. Sicherheitsaspekte
+Fail-Safe-Mechanismus: Servo schließt oder öffnet bei Verbindungsverlust
+
+
+Mechanische Sicherung gegen unbeabsichtigtes Öffnen
+9. Fazit und Ausblick
+Die Montage eines Greifarms an die Drohne ist technisch machbar und kann mit vorhandenen Komponenten (Servo, Raspberry Pi, Flight Controller) realisiert werden. Für den praktischen Betrieb sind Anpassungen an Gewicht und Schwerpunkt erforderlich. Der vorgestellte Entwurf bietet eine Grundlage für eine spätere Umsetzung, die über einfache Objekte Ergreifung hinaus auch autonomes Handling ermöglichen könnte.
 
 
