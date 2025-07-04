@@ -1,5 +1,7 @@
 import msp
 
+# Based on: https://github.com/under0tech/autopilot_bee_ept/blob/main/commands.py
+# current msp_override_channels_mask 00001111 = 15
 class AutopilotController():
     def __init__():
         self.DEFAULT_ROLL = 1500
@@ -27,18 +29,21 @@ class AutopilotController():
         return True
 
     def prepare():
-        self.override_rc(
-            self.DEFAULT_ROLL,
-            self.DEFAULT_PITCH,
-            self.DEFAULT_THROTTLE,
-            self.DEFAULT_YAW, 
-            self.AUX1, self.AUX2, self.AUX3, self.AUX4)  
+        status = self.override_rc(
+                    self.DEFAULT_ROLL,
+                    self.DEFAULT_PITCH,
+                    self.DEFAULT_THROTTLE,
+                    self.DEFAULT_YAW, 
+                    self.AUX1, self.AUX2, self.AUX3, self.AUX4)  
+        return status
 
     def go_forward():
-        self.override_rc(
-            self.DEFAULT_ROLL,
-            self.DEFAULT_PITCH + 20, 
-            self.DEFAULT_THROTTLE + 100, 
-            self.DEFAULT_YAW, 
-            self.AUX1, self.AUX2, self.AUX3, self.AUX4) 
+        status = self.override_rc(
+                    self.DEFAULT_ROLL,
+                    self.DEFAULT_PITCH + 20, 
+                    self.DEFAULT_THROTTLE + 100, 
+                    self.DEFAULT_YAW, 
+                    self.AUX1, self.AUX2, self.AUX3, self.AUX4) 
+        return status
+        
     

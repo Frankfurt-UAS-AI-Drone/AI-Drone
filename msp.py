@@ -4,7 +4,7 @@ from enum import IntEnum
 
 # https://gist.github.com/reefwing/e9ba13aed51e83cb7245bb4e55b84dea
 
-# BEGIN Send and receive MSP commands. Taken from: https://github.com/under0tech/autopilot_bee_ept/blob/main/msp_helper.py
+# Taken from: https://github.com/under0tech/autopilot_bee_ept/blob/main/msp_helper.py
 
 class Command(IntEnum):
     MSP_STATUS = 101
