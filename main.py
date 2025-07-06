@@ -18,10 +18,12 @@ controller = InferenceController()
 video_thread = None
 
 print("Initializing Autopilot...")
-autopilot = AutopilotController()
+autopilot = AutopilotController(serial_port=port)
 
 aux3_previous = 1000
 aux4_previous = 1000
+
+prepared = False
 
 print("Ready...")
 try:
